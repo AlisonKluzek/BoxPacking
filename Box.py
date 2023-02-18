@@ -11,4 +11,7 @@ class Box:
         self.width = width
         self.id = id
 
-    # TODO add a method to flip the box
+    # Flips the box at a 90-degree angle
+    def flip(self):
+        self.height, self.width = self.width, self.height
+
