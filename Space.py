@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 """
 Acts as a space to store boxes on an width by height grid.
@@ -42,7 +43,6 @@ class Space:
 
         # Ensures that there's enough room for the box given it's size.
         if self.height < box.height + y:
-            print(box.height + y)
             return False
         elif self.width < box.width + x:
             return False
@@ -59,6 +59,24 @@ class Space:
             return False
 
         return True
+
+    # Returns the number of boxes packed
+    def __len__(self):
+        return len(self.boxes)
+
+    # Creates a deep copy
+    def __deepcopy__(self, memo):
+        cls = self.__class__
+        cp = cls.__new__(cls)
+        memo[id(self)] = cp
+        cp.height = self.height
+        cp.width = self.width
+        cp.grid = self.grid.copy()
+        cp.boxes = self.boxes.copy()
+        return cp
+
+    def __str__(self):
+        return str(self.grid)
 
 
 

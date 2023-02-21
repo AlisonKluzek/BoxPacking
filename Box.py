@@ -11,7 +11,15 @@ class Box:
         self.width = width
         self.id = id
 
+    # Returns the total area of the box
+    @property
+    def area(self):
+        return self.width * self.height
+
     # Flips the box at a 90-degree angle
     def flip(self):
         self.height, self.width = self.width, self.height
+
+    def __str__(self):
+        return "{}, {}x{}".format(self.id, self.height, self.width)
 
