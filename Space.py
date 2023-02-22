@@ -12,8 +12,12 @@ class Space:
         self.grid = np.zeros((height, width))  # Int Array that acts as the space
         self.boxes = {}  # Dictionary containing the boxes inside the space, with box id as the keys
 
+    # Returns the area of the grid that still empty
+    @property
+    def area(self):
+        return self.height * self.width - np.count_nonzero(self.grid)
+
     # Places a given box at the given location, returns true if it is successfully placed, otherwise returns false
-    # TODO implment
     def place(self, box, y, x):
 
         # Errors if the same box id is added twice
@@ -60,6 +64,7 @@ class Space:
 
         return True
 
+
     # Returns the number of boxes packed
     def __len__(self):
         return len(self.boxes)
@@ -76,7 +81,15 @@ class Space:
         return cp
 
     def __str__(self):
+
+        #for y in self.grid:
+        #    for x in self
+
+
         return str(self.grid)
+
+    def __repr__(self):
+        return str(self.grid) + "\n\n" + str(self.boxes)
 
 
 

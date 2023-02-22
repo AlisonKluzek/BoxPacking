@@ -21,7 +21,7 @@ class MyTestCase(unittest.TestCase):
         self.b2 = Box(2, 1, 1)
         self.b3 = Box(42, 5, 1)
 
-        self.packer = main.bruteForcePacking
+        self.packer = main.largestFirstPacking
 
 
     # Tests if boxFits raises an exception when checking if a box could fit outside the bounds of the space

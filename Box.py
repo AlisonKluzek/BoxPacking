@@ -20,6 +20,12 @@ class Box:
     def flip(self):
         self.height, self.width = self.width, self.height
 
+    def __add__(self, box):
+        return self.area + box.area
+
     def __str__(self):
-        return "{}, {}x{}".format(self.id, self.height, self.width)
+        return "{}: {}x{}".format(self.id, self.height, self.width)
+
+    def __repr__(self):
+        return str(self)
 
