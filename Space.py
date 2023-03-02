@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+
 """
 Acts as a space to store boxes on an width by height grid.
 """
@@ -7,9 +8,9 @@ class Space:
 
     # initializes the space
     def __init__(self, height, width):
-        self.height = height  # height of the space
-        self.width = width  # width of the space
-        self.grid = np.zeros((height, width))  # Int Array that acts as the space
+        self.height = int(height)  # height of the space
+        self.width = int(width)  # width of the space
+        self.grid = np.zeros((int(height), int(width)))  # Int Array that acts as the space
         self.boxes = {}  # Dictionary containing the boxes inside the space, with box id as the keys
 
     # Returns the area of the grid that still empty
@@ -86,10 +87,10 @@ class Space:
         #    for x in self
 
 
-        return str(self.grid)
+        return str(np.matrix(self.grid))
 
     def __repr__(self):
-        return str(self.grid) + "\n\n" + str(self.boxes)
+        return str(np.matrix(self.grid)) + "\n\n" + str(self.boxes)
 
 
 

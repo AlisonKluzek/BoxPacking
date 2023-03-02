@@ -7,8 +7,8 @@ class Box:
 
     # initializes the box
     def __init__(self, id, height = 1, width = 1):
-        self.height = height
-        self.width = width
+        self.height = int(height)
+        self.width = int(width)
         self.id = id
 
     # Returns the total area of the box
