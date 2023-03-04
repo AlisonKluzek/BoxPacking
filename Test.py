@@ -10,7 +10,7 @@ class MyTestCase(unittest.TestCase):
     def __init__(self, methodName: str = ...):
         super().__init__(methodName)
         self.seed = rand.randint(0,1000000)
-        self.seed = 533462
+        self.seed = 302902
         rand.seed(self.seed)
 
     # Creates a 5x4 space and a 3x2 box to test with
@@ -20,6 +20,7 @@ class MyTestCase(unittest.TestCase):
         self.b1 = Box(1, 3, 2)
         self.b2 = Box(2, 1, 1)
         self.b3 = Box(42, 5, 1)
+        self.b4 = Box(4, 3, 2)
 
         self.packer = main.largestFirstPacking
 
@@ -40,17 +41,15 @@ class MyTestCase(unittest.TestCase):
     # Tests if boxFits handles overlap appropriately.
     def test_boxFits_overlap(self):
         self.assertEqual(True, self.crate.boxFits(self.b1, 0, 0))
-        self.crate.grid[0,0] = 1
+        self.crate.place(self.b1, 0, 0)
         self.assertEqual(False, self.crate.boxFits(self.b1, 0, 0))
         self.crate.grid[0, 0] = 0
 
-    # TODO add tests for space.place()
-
     # Tests duplicate place id
     def test_place_id(self):
-        with self.assertRaises(Exception):
-            self.crate.place(self.b1, 0, 0)
-            self.crate.place(self.b1, 2, 2)
+        self.crate.place(self.b1, 0, 0)
+        self.crate.place(self.b1, 2, 2)
+        self.crate.place(self.b4, 0, 0)
 
     def test_place_overlap(self):
         self.assertEqual(True, self.crate.place(self.b1, 2, 2))
@@ -69,7 +68,7 @@ class MyTestCase(unittest.TestCase):
             space = Space(rand.randint(2, 6), rand.randint(2, 6))
             boxes1 = []
 
-            for b in range(rand.randint(5, 10)):
+            for b in range(1,rand.randint(5, 10)):
                 boxes1.append(Box(b, rand.randint(1, 6), rand.randint(1, 6)))
 
 

@@ -93,29 +93,66 @@ def loadCase(file_name):
 
     return space, boxes
 
+# Exploratory code, ignore
+def occTest(h,w):
+    d = np.zeros((h,w))
+
+    a = np.zeros((h,w), dtype= bool)
+
+    y = 3
+    x = 4
+    h1 = 3
+    w1 = 2
+
+    a[y:y + h1, x:x + w1].fill(True)
+    print(a)
+    print(a.nbytes)
+
+    b = np.zeros((h, w), dtype=bool)
+
+    y = 0
+    x = 1
+    h1 = 4
+    w1 = 3
+
+    b[y:y + h1, x:x + w1].fill(True)
+    print(b)
+    print(b.nbytes)
+    print(a+b)
+    c= a+b
+    print(c.astype(int))
+    d += a * 3
+    print(d)
+
+
+
 
 # TODO this code is a mess right now, will clean up later
 if __name__ == '__main__':
-    s, b = loadCase("Data/case4.txt")
-    print(s)
-    print(b)
-    np.set_printoptions(threshold=sys.maxsize)
+    occTest(10, 10)
 
-    s = tallestFirstPacking(s,b)
 
-    print(s)
 
-    space = Space(5,4)
-
-    b1 = Box(1, 3, 2)
-    b2 = Box(2, 1, 1)
-    b3 = Box(3, 2, 2)
-    b4 = Box(4, 3, 1)
-    b5 = Box(5, 5, 1)
-    b6 = Box(6, 1, 4)
-    b7 = Box(7, 1, 1)
-
-    boxes = [b1, b2, b3, b4, b5, b6, b7]
+    # s, b = loadCase("Data/case4.txt")
+    # print(s)
+    # print(b)
+    # np.set_printoptions(threshold=sys.maxsize)
+    #
+    # s = tallestFirstPacking(s,b)
+    #
+    # print(s)
+    #
+    # space = Space(5,4)
+    #
+    # b1 = Box(1, 3, 2)
+    # b2 = Box(2, 1, 1)
+    # b3 = Box(3, 2, 2)
+    # b4 = Box(4, 3, 1)
+    # b5 = Box(5, 5, 1)
+    # b6 = Box(6, 1, 4)
+    # b7 = Box(7, 1, 1)
+    #
+    # boxes = [b1, b2, b3, b4, b5, b6, b7]
 
     #print(bruteForcePacking(Space(2,2), [Box(1, 1, 1),Box(2,1,1)]))
 

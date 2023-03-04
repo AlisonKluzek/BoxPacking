@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+from PBox import PBox
 
 """
 Acts as a space to store boxes on an width by height grid.
@@ -10,7 +11,6 @@ class Space:
     def __init__(self, height, width):
         self.height = int(height)  # height of the space
         self.width = int(width)  # width of the space
-        self.grid = np.zeros((int(height), int(width)))  # Int Array that acts as the space
         self.boxes = {}  # Dictionary containing the boxes inside the space, with box id as the keys
 
     # Returns the area of the grid that still empty
@@ -18,22 +18,43 @@ class Space:
     def area(self):
         return self.height * self.width - np.count_nonzero(self.grid)
 
-    # Places a given box at the given location, returns true if it is successfully placed, otherwise returns false
+    # Bool Array that acts as the space for collision testing
+    @property
+    def grid(self):
+        # If no boxes have been placed return default array
+        if len(self.boxes) == 0:
+            grid = np.zeros((self.height, self.width), dtype=bool)
+        # Otherwise, return the combined occlusion array
+        else:
+            grid = np.add.reduce([box.occ for box in self.boxes.values()], dtype=bool)
+        return grid
+
+
+    # Places a given box at the given location, returns true if it is successfully placed, otherwise returns fals
+    # If the same box is placed twice, overrides it.
     def place(self, box, y, x):
 
-        # Errors if the same box id is added twice
-        assert (box.id not in self.boxes), "That ID is already used"
 
         # Checks if the box fits
         if (not self.boxFits(box, y, x)):
             return False
 
+        if box.id in self.boxes:
+            pBox = self.boxes[box.id]
+        else:
+            pBox = PBox(box.id, box.height, box.width)
+
+        occ = np.zeros((self.height,self.width), dtype= bool)
+
         # Adds the box id to the given area
-        boxArea = self.grid[y:y + box.height, x:x + box.width]
-        boxArea += box.id
+        occ[y:y + box.height, x:x + box.width].fill(True)
+
+        pBox.y = y
+        pBox.x = x
+        pBox.occ = occ
 
         # Adds the box to the boxes dictionary
-        self.boxes[box.id] = box
+        self.boxes[box.id] = pBox
 
         # Box successfully placed
         return True
@@ -52,12 +73,9 @@ class Space:
         elif self.width < box.width + x:
             return False
 
+
         # slices the sub array that the box would be placed in
         boxArea = self.grid[y:y+box.height,x:x+box.width]
-
-        #print((y,y+box.height,x,x+box.width))
-        #print(self.grid)
-        #print(area)
 
         # Checks if the box would overlap another by checking if Area contains anything other than zeros
         if np.any(boxArea):
@@ -77,20 +95,19 @@ class Space:
         memo[id(self)] = cp
         cp.height = self.height
         cp.width = self.width
-        cp.grid = self.grid.copy()
-        cp.boxes = self.boxes.copy()
+        cp.boxes = copy.deepcopy(self.boxes)
         return cp
 
     def __str__(self):
+        grid = np.zeros((self.height, self.width), dtype=int)
+        for i, b in self.boxes.items():
+            grid += b.occ * i
 
-        #for y in self.grid:
-        #    for x in self
 
-
-        return str(np.matrix(self.grid))
+        return str(grid)
 
     def __repr__(self):
-        return str(np.matrix(self.grid)) + "\n\n" + str(self.boxes)
+        return str(self) + "\n\n" + str(self.boxes)
 
 
 
