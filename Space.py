@@ -1,6 +1,7 @@
 import copy
 import numpy as np
 from PBox import PBox
+import matplotlib.pyplot as plt
 
 """
 Acts as a space to store boxes on an width by height grid.
@@ -16,17 +17,26 @@ class Space:
     # Returns the area of the grid that still empty
     @property
     def area(self):
-        return self.height * self.width - np.count_nonzero(self.grid)
+        return self.height * self.width - np.count_nonzero(self.occ)
 
     # Bool Array that acts as the space for collision testing
     @property
-    def grid(self):
+    def occ(self):
         # If no boxes have been placed return default array
         if len(self.boxes) == 0:
             grid = np.zeros((self.height, self.width), dtype=bool)
         # Otherwise, return the combined occlusion array
         else:
             grid = np.add.reduce([box.occ for box in self.boxes.values()], dtype=bool)
+        return grid
+
+    # int Array that acts as the space for collision testing
+    @property
+    def grid(self):
+        grid = np.zeros((self.height, self.width), dtype=int)
+        for i, b in self.boxes.items():
+            grid += b.occ * i
+
         return grid
 
 
@@ -75,7 +85,7 @@ class Space:
 
 
         # slices the sub array that the box would be placed in
-        boxArea = self.grid[y:y+box.height,x:x+box.width]
+        boxArea = self.occ[y:y+box.height,x:x+box.width]
 
         # Checks if the box would overlap another by checking if Area contains anything other than zeros
         if np.any(boxArea):
@@ -83,6 +93,17 @@ class Space:
 
         return True
 
+    # Display the grid as a plot
+    def show(self):
+        plt.imshow(self.grid, interpolation="nearest")
+
+        # Labels every cell
+        for y in range(self.grid.shape[0]):
+            for x in range(self.grid.shape[1]):
+                text = plt.text(x, y, self.grid[y, x],
+                                ha="center", va="center", color="w")
+
+        plt.show()
 
     # Returns the number of boxes packed
     def __len__(self):
@@ -99,15 +120,10 @@ class Space:
         return cp
 
     def __str__(self):
-        grid = np.zeros((self.height, self.width), dtype=int)
-        for i, b in self.boxes.items():
-            grid += b.occ * i
-
-
-        return str(grid)
+        return str(self.grid) + "\n\n" + str(self.boxes)
 
     def __repr__(self):
-        return str(self) + "\n\n" + str(self.boxes)
+        return str(self)
 
 
 

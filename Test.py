@@ -75,6 +75,10 @@ class MyTestCase(unittest.TestCase):
             c = self.packer(space, boxes1)
 
             print(c)
+            print(boxes1)
+            #c.show()
+
+
 
 
 

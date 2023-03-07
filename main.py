@@ -5,6 +5,7 @@ from Space import Space
 from operator import attrgetter
 import sys
 
+
 # Attempts find the best solution to pack Space via brute force
 def bruteForcePacking(space, boxes):
     bestSpace = copy.deepcopy(space)    # Best space we've found
@@ -40,16 +41,17 @@ def bruteForcePacking(space, boxes):
 
     return bestSpace
 
-# Sorts the boxes by size, and places the largest boxes first
-def largestFirstPacking(space, boxes):
+
+# Sorts the boxes by an attribute
+def attrFristPacking(space, boxes, attr="area", reverse=True):
     bestSpace = copy.deepcopy(space)  # Best space we've found
 
     # Sorts boxes by total area
-    boxes = sorted(boxes, key=attrgetter('area'), reverse=True)
+    boxes = sorted(boxes, key=attrgetter(attr), reverse=reverse)
 
     # For every box
     for b in boxes:
-        looping = True # Should the loop be ended
+        looping = True  # Should the loop be ended
         # For every spot in space that box b could fit try to place b
         for y in range(space.height - b.height + 1):
             for x in range(space.width - b.width + 1):
@@ -57,24 +59,15 @@ def largestFirstPacking(space, boxes):
                     if bestSpace.place(b, y, x):
                         looping = False
     return bestSpace
+
+
+# Sorts the boxes by size, and places the largest boxes first
+def largestFirstPacking(space, boxes):
+    return attrFristPacking(space, boxes, "area")
 
 # Sorts the boxes by height, and places the largest boxes first
 def tallestFirstPacking(space, boxes):
-    bestSpace = copy.deepcopy(space)  # Best space we've found
-
-    # Sorts boxes by height
-    boxes = sorted(boxes, key=attrgetter('height'), reverse=True)
-
-    # For every box
-    for b in boxes:
-        looping = True # Should the loop be ended
-        # For every spot in space that box b could fit try to place b
-        for y in range(space.height - b.height + 1):
-            for x in range(space.width - b.width + 1):
-                if looping:
-                    if bestSpace.place(b, y, x):
-                        looping = False
-    return bestSpace
+    return attrFristPacking(space, boxes)
 
 # Loads a space and box list from txt file
 def loadCase(file_name):
